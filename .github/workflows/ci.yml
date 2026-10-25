@@ -16,11 +16,9 @@ jobs:
       fail-fast: false
       matrix:
         php: ['8.2', '8.3', '8.4', '8.5']
-        laravel: ['11', '12', '13']
+        laravel: ['12', '13']
         dependencies: [lowest, stable]
         exclude:
-          - laravel: '11'
-            php: '8.5'
           - laravel: '13'
             php: '8.2'
     steps:
@@ -35,7 +33,6 @@ jobs:
           LARAVEL: ${{ matrix.laravel }}
         run: |
           case "$LARAVEL" in
-            11) testbench=9 ;;
             12) testbench=10 ;;
             13) testbench=11 ;;
             *) exit 1 ;;

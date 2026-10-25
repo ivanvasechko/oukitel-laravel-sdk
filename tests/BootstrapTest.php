@@ -18,6 +18,7 @@ it('ships an unofficial package with its licence and required notice', function 
     expect($manifest['name'])->toBe('ivanvasechko/oukitel-laravel-sdk')
         ->and($manifest['description'])->toStartWith('Unofficial')
         ->and($manifest['license'])->toBe('PolyForm-Noncommercial-1.0.0')
+        ->and($manifest['require']['illuminate/support'])->toBe('^12.0 || ^13.0')
         ->and(file_get_contents($root.'/LICENSE'))
         ->toStartWith('# PolyForm Noncommercial License 1.0.0')
         ->toContain('Required Notice: Copyright (c) Ivan Vasechko');
