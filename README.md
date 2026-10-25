@@ -59,6 +59,10 @@ composer pint -- --test
 composer audit
 ```
 
+This library intentionally does not commit `composer.lock`. Consumers use their
+application lockfile; CI resolves both the lowest and latest supported dependency
+versions. Run `composer update` to refresh the local development lockfile.
+
 Tests boot Laravel with Orchestra Testbench. PHPStan checks the bootstrap harness
 only. CI enforces 90% coverage once production PHP source is added.
 The core SDK dependency and discovery metadata are deliberately deferred until
