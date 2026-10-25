@@ -14,7 +14,7 @@ This is not an OSI open-source licence.
 
 Repository bootstrap only. No provider, facade, protocol implementation, released
 version or Packagist installation exists yet. Do not use in production.
-Runtime integration follows in power-platform task 15-05.
+Runtime integration is planned for a future release.
 
 ## Install and quick start
 
@@ -40,7 +40,7 @@ APIs, constants or data formats. This licence covers only rights the author can 
 
 Thanks to [VictorCV-DAM/ha-oukitel](https://github.com/VictorCV-DAM/ha-oukitel)
 (GPL-3.0) for protocol research. No code from that project is included.
-The planned implementation follows the clean-room power-platform design.
+The planned implementation will use a clean-room design.
 
 ## Rights-holder concerns
 
@@ -58,6 +58,10 @@ composer phpstan
 composer pint -- --test
 composer audit
 ```
+
+This library intentionally does not commit `composer.lock`. Consumers use their
+application lockfile; CI resolves both the lowest and latest supported dependency
+versions. Run `composer update` to refresh the local development lockfile.
 
 Tests boot Laravel with Orchestra Testbench. PHPStan checks the bootstrap harness
 only. CI enforces 90% coverage once production PHP source is added.
