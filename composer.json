@@ -1,0 +1,46 @@
+{
+  "name": "ivanvasechko/oukitel-laravel-sdk",
+  "description": "Unofficial Oukitel Laravel SDK (bootstrap; no runtime integration yet).",
+  "type": "library",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "authors": [
+    {
+      "name": "Ivan Vasechko",
+      "homepage": "https://github.com/ivanvasechko"
+    }
+  ],
+  "require": {
+    "php": "^8.2",
+    "illuminate/support": "^11.0 || ^12.0 || ^13.0"
+  },
+  "require-dev": {
+    "larastan/larastan": "^3.0",
+    "laravel/pint": "^1.32.1",
+    "orchestra/testbench": "^9.0 || ^10.0 || ^11.0",
+    "pestphp/pest": "^2.36 || ^3.0 || ^4.0",
+    "pestphp/pest-plugin-laravel": "^2.0 || ^3.0 || ^4.0",
+    "phpstan/phpstan": "^2.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "IvanVasechko\\Oukitel\\Laravel\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "IvanVasechko\\Oukitel\\Laravel\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "pest",
+    "test-coverage": "pest --coverage --min=90",
+    "phpstan": "phpstan analyse --memory-limit=512M",
+    "pint": "pint"
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    },
+    "sort-packages": true
+  }
+}

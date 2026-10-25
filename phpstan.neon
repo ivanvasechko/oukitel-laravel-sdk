@@ -1,0 +1,7 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+parameters:
+    level: max
+    paths:
+        - tests/TestCase.php
+    # Add src when the Laravel integration lands.
