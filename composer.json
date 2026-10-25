@@ -11,14 +11,14 @@
   ],
   "require": {
     "php": "^8.2",
-    "illuminate/support": "^11.0 || ^12.0 || ^13.0"
+    "illuminate/support": "^12.0 || ^13.0"
   },
   "require-dev": {
     "larastan/larastan": "^3.0",
-    "laravel/pint": "^1.32.1",
-    "orchestra/testbench": "^9.0 || ^10.0 || ^11.0",
-    "pestphp/pest": "^2.36 || ^3.0 || ^4.0",
-    "pestphp/pest-plugin-laravel": "^2.0 || ^3.0 || ^4.0",
+    "laravel/pint": "^1.29.3",
+    "orchestra/testbench": "^10.0 || ^11.0",
+    "pestphp/pest": "^3.0 || ^4.0",
+    "pestphp/pest-plugin-laravel": "^3.0 || ^4.0",
     "phpstan/phpstan": "^2.1"
   },
   "autoload": {

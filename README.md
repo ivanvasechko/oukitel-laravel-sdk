@@ -24,8 +24,10 @@ Once released, installation will be:
 composer require ivanvasechko/oukitel-laravel-sdk
 ```
 
-No working SDK quick start exists yet. Planned support covers Laravel 11 on
-PHP 8.2-8.4, Laravel 12 on PHP 8.2-8.5 and Laravel 13 on PHP 8.3-8.5.
+No working SDK quick start exists yet. Planned support covers Laravel 12 on
+PHP 8.2-8.5 and Laravel 13 on PHP 8.3-8.5.
+Laravel 11 is excluded: its available releases are blocked by security advisories
+as of 2026-10-25. Dependency auditing remains mandatory.
 Never paste credentials into issues, logs or examples.
 
 ## Disclaimer and attribution
