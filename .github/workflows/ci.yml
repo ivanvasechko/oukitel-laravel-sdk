@@ -51,6 +51,44 @@ jobs:
             composer test
           fi
       - run: composer audit
+  integration:
+    name: Redis and archived consumer / Laravel ${{ matrix.laravel }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        laravel: ['12', '13']
+    services:
+      redis:
+        image: redis:7-alpine
+        ports: ['6379:6379']
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: redis, zip
+          coverage: none
+          tools: composer:v2
+      - name: Select supported framework
+        env:
+          LARAVEL: ${{ matrix.laravel }}
+        run: |
+          case "$LARAVEL" in
+            12) testbench=10 ;;
+            13) testbench=11 ;;
+            *) exit 1 ;;
+          esac
+          composer require --dev --no-update "laravel/framework:^$LARAVEL.0" "orchestra/testbench:^$testbench.0"
+          composer update --prefer-dist --no-interaction
+      - run: composer test -- tests/Integration/RedisOwnershipTest.php
+        env:
+          OUKITEL_TEST_REDIS: '1'
+          REDIS_HOST: 127.0.0.1
+      - run: php tests/Distribution/check.php ${{ matrix.laravel }}
   secrets:
     name: Secret scan
     runs-on: ubuntu-latest
@@ -64,11 +102,12 @@ jobs:
   quality:
     name: Quality gate
     if: always()
-    needs: [php, secrets]
+    needs: [php, integration, secrets]
     runs-on: ubuntu-latest
     steps:
       - name: Require all checks
         env:
           PHP_RESULT: ${{ needs.php.result }}
           SECRET_RESULT: ${{ needs.secrets.result }}
-        run: test "$PHP_RESULT" = success && test "$SECRET_RESULT" = success
+          INTEGRATION_RESULT: ${{ needs.integration.result }}
+        run: test "$PHP_RESULT" = success && test "$SECRET_RESULT" = success && test "$INTEGRATION_RESULT" = success

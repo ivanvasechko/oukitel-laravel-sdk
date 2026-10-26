@@ -14,6 +14,7 @@ use IvanVasechko\Oukitel\Exceptions\CacheFailed;
 use IvanVasechko\Oukitel\Session\Psr16SessionStore;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Psr\SimpleCache\CacheException;
 use RuntimeException;
 use SensitiveParameter;
 
@@ -102,7 +103,7 @@ final readonly class LaravelSessionStore implements SessionStore
     {
         try {
             return $operation();
-        } catch (RuntimeException) {
+        } catch (CacheException|RuntimeException) {
             throw new CacheFailed;
         }
     }

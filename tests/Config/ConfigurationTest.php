@@ -43,6 +43,8 @@ it('rejects invalid configuration without echoing its value', function (string $
     ['session.use_refresh_token', 'true'], ['regions.EU.app_id', 5],
     ['regions.EU.base_url', 'secret-invalid-url'], ['logging.channel', "bad\nvalue"],
     ['probe.password', []],
+    ['http', false], ['session', null], ['logging', 'bad'], ['probe', 42],
+    ['regions', 'invalid'], ['regions.EU', 'invalid'],
 ]);
 
 it('rejects a non-array config and treats empty probe password as absent', function (): void {

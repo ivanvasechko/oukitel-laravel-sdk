@@ -22,6 +22,9 @@ it('round-trips sessions, isolates prefixes and deletes missing entries safely',
     $first->put('session', $session, 60);
     expect($first->get('session'))->toEqual($session);
     expect($other->get('session'))->toBeNull();
+    $first->delete('session');
+    expect($first->get('session'))->toBeNull();
+    $first->put('session', $session, 60);
     $first->coolDown('cooldown', 30);
     expect($first->isCoolingDown('cooldown'))->toBeTrue();
     expect($other->isCoolingDown('cooldown'))->toBeFalse();
@@ -137,4 +140,16 @@ it('surfaces backend failures and refuses invalid lease lifetimes', function ():
     expect(fn () => $store->get('bad'))->toThrow(CacheFailed::class);
     expect(fn () => $store->delete('bad'))->toThrow(CacheFailed::class);
     expect(fn () => $store->acquireRefreshLock('lease', 0))->toThrow(InvalidArgumentException::class);
+});
+
+it('never falls back after a supported lock backend fails', function (): void {
+    $backend = new class extends ArrayStore
+    {
+        public function lock($name, $seconds = 0, $owner = null)
+        {
+            throw new RuntimeException('private-backend-detail');
+        }
+    };
+    $store = new LaravelSessionStore(new Repository($backend));
+    expect(fn () => $store->acquireRefreshLock('lease', 30))->toThrow(CacheFailed::class);
 });

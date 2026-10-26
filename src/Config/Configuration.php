@@ -30,8 +30,17 @@ final readonly class Configuration
         if (! is_array($values)) {
             throw new ConfigurationMissing('config');
         }
+        foreach (['regions', 'http', 'session', 'logging', 'probe'] as $section) {
+            if (array_key_exists($section, $values) && ! is_array($values[$section])) {
+                throw new ConfigurationMissing($section);
+            }
+        }
         $regions = [];
         foreach (Region::cases() as $region) {
+            $key = 'regions.'.$region->value;
+            if (Arr::has($values, $key) && ! is_array(Arr::get($values, $key))) {
+                throw new ConfigurationMissing($key);
+            }
             $preset = RegionConfiguration::preset($region);
             $fields = [
                 'base_url' => $preset->baseUrl, 'app_id' => $preset->appId,

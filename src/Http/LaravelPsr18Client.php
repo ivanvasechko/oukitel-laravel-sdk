@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace IvanVasechko\Oukitel\Laravel\Http;
 
+use GuzzleHttp\Psr7\Utils;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Factory;
 use IvanVasechko\Oukitel\Config\ClientOptions;
@@ -22,7 +23,7 @@ final readonly class LaravelPsr18Client implements ClientInterface
     public function sendRequest(#[SensitiveParameter] RequestInterface $request): ResponseInterface
     {
         try {
-            return $this->http->createPendingRequest()
+            $response = $this->http->createPendingRequest()
                 ->async(false)
                 ->connectTimeout($this->options->connectTimeoutSeconds)
                 ->timeout($this->options->timeoutSeconds)
@@ -30,7 +31,10 @@ final readonly class LaravelPsr18Client implements ClientInterface
                 ->send($request->getMethod(), (string) $request->getUri(), [
                     'headers' => $request->getHeaders(),
                     'body' => (string) $request->getBody(),
-                ])->toPsrResponse();
+                ]);
+
+            // Keep core consumption independent of reusable Laravel fake response streams.
+            return $response->toPsrResponse()->withBody(Utils::streamFor($response->body()));
         } catch (ConnectionException) {
             throw new NetworkFailed($request);
         }

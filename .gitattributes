@@ -11,3 +11,8 @@
 /CONTRIBUTING.md export-ignore
 /SECURITY.md export-ignore
 /src/.gitkeep export-ignore
+/vendor export-ignore
+/composer.lock export-ignore
+/.phpunit.cache export-ignore
+/.phpunit.result.cache export-ignore
+/.phpstan-cache export-ignore

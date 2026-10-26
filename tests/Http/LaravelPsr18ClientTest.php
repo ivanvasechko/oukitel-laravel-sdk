@@ -60,3 +60,14 @@ it('preserves native stray-request prevention', function (): void {
         ->toThrow(RuntimeException::class);
     Http::assertNothingSent();
 });
+
+it('does not exhaust reusable native fake response bodies', function (): void {
+    Http::preventStrayRequests();
+    Http::fake(['https://cloud.example.test/read' => Http::response('synthetic-body')]);
+    $client = new LaravelPsr18Client(app(Factory::class), new ClientOptions);
+    $request = new Request('GET', 'https://cloud.example.test/read');
+    $first = $client->sendRequest($request);
+    expect($first->getBody()->getContents())->toBe('synthetic-body');
+    $first->getBody()->close();
+    expect($client->sendRequest($request)->getBody()->getContents())->toBe('synthetic-body');
+});
