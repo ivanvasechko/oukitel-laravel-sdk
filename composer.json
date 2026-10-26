@@ -1,6 +1,6 @@
 {
   "name": "ivanvasechko/oukitel-laravel-sdk",
-  "description": "Unofficial Oukitel Laravel SDK (bootstrap; no runtime integration yet).",
+  "description": "Unofficial Laravel integration for the Oukitel cloud SDK with native HTTP, cache and testing support.",
   "type": "library",
   "license": "PolyForm-Noncommercial-1.0.0",
   "authors": [
@@ -11,7 +11,20 @@
   ],
   "require": {
     "php": "^8.2",
-    "illuminate/support": "^12.0 || ^13.0"
+    "guzzlehttp/psr7": "^2.9 || ^3.0",
+    "illuminate/cache": "^12.0 || ^13.0",
+    "illuminate/console": "^12.0 || ^13.0",
+    "illuminate/contracts": "^12.0 || ^13.0",
+    "illuminate/http": "^12.0 || ^13.0",
+    "illuminate/log": "^12.0 || ^13.0",
+    "illuminate/support": "^12.0 || ^13.0",
+    "ivanvasechko/oukitel-php-sdk": "^0.3",
+    "psr/clock": "^1.0",
+    "psr/http-client": "^1.0",
+    "psr/http-factory": "^1.0",
+    "psr/http-message": "^1.1 || ^2.0",
+    "psr/log": "^2.0 || ^3.0",
+    "psr/simple-cache": "^2.0 || ^3.0"
   },
   "require-dev": {
     "larastan/larastan": "^3.0",
@@ -31,6 +44,16 @@
       "IvanVasechko\\Oukitel\\Laravel\\Tests\\": "tests/"
     }
   },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "IvanVasechko\\Oukitel\\Laravel\\OukitelServiceProvider"
+      ],
+      "aliases": {
+        "Oukitel": "IvanVasechko\\Oukitel\\Laravel\\Facades\\Oukitel"
+      }
+    }
+  },
   "scripts": {
     "test": "pest",
     "test-coverage": "pest --coverage --min=90",
@@ -39,7 +62,8 @@
   },
   "config": {
     "allow-plugins": {
-      "pestphp/pest-plugin": true
+      "pestphp/pest-plugin": true,
+      "php-http/discovery": false
     },
     "sort-packages": true
   }

@@ -1,0 +1,2 @@
+providers:
+  - IvanVasechko\Oukitel\Laravel\OukitelServiceProvider
