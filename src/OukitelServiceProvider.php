@@ -17,6 +17,7 @@ use IvanVasechko\Oukitel\Contracts\SessionStore;
 use IvanVasechko\Oukitel\Http\AcceleronixCloudClient;
 use IvanVasechko\Oukitel\Laravel\Cache\LaravelSessionStore;
 use IvanVasechko\Oukitel\Laravel\Config\Configuration;
+use IvanVasechko\Oukitel\Laravel\Console\ProbeOukitelCommand;
 use IvanVasechko\Oukitel\Laravel\Http\LaravelPsr18Client;
 use IvanVasechko\Oukitel\OukitelClient;
 use IvanVasechko\Oukitel\Session\SessionManager;
@@ -55,6 +56,7 @@ final class OukitelServiceProvider extends ServiceProvider
     public function boot(): void
     {
         if ($this->app->runningInConsole()) {
+            $this->commands([ProbeOukitelCommand::class]);
             $this->publishes([__DIR__.'/../config/oukitel.php' => config_path('oukitel.php')], 'oukitel-config');
         }
     }
