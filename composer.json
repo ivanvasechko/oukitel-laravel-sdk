@@ -44,6 +44,16 @@
       "IvanVasechko\\Oukitel\\Laravel\\Tests\\": "tests/"
     }
   },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "IvanVasechko\\Oukitel\\Laravel\\OukitelServiceProvider"
+      ],
+      "aliases": {
+        "Oukitel": "IvanVasechko\\Oukitel\\Laravel\\Facades\\Oukitel"
+      }
+    }
+  },
   "scripts": {
     "test": "pest",
     "test-coverage": "pest --coverage --min=90",
