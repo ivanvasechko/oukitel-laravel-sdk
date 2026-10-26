@@ -99,10 +99,23 @@ jobs:
       - uses: gitleaks/gitleaks-action@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  documentation:
+    name: Documentation and release policy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run release:test
+      - run: npm run docs:check
+      - run: npm audit
   quality:
     name: Quality gate
     if: always()
-    needs: [php, integration, secrets]
+    needs: [php, integration, secrets, documentation]
     runs-on: ubuntu-latest
     steps:
       - name: Require all checks
@@ -110,4 +123,5 @@ jobs:
           PHP_RESULT: ${{ needs.php.result }}
           SECRET_RESULT: ${{ needs.secrets.result }}
           INTEGRATION_RESULT: ${{ needs.integration.result }}
-        run: test "$PHP_RESULT" = success && test "$SECRET_RESULT" = success && test "$INTEGRATION_RESULT" = success
+          DOCUMENTATION_RESULT: ${{ needs.documentation.result }}
+        run: test "$PHP_RESULT" = success && test "$SECRET_RESULT" = success && test "$INTEGRATION_RESULT" = success && test "$DOCUMENTATION_RESULT" = success

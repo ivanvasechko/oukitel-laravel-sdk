@@ -261,6 +261,10 @@ composer pint -- --test
 composer audit
 php tests/Distribution/check.php 12
 php tests/Distribution/check.php 13
+npm ci
+npm run release:test
+npm run docs:check
+npm audit
 ```
 
 This library intentionally does not commit `composer.lock`. Consumers use their

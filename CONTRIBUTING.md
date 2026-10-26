@@ -5,7 +5,7 @@ focused, add regression tests and run the commands in README before submitting.
 Contributions are provided under this repository's licence.
 
 Never commit real credentials, device/product keys, account emails, tokens,
-`authKey` values, Tuya access IDs/keys or UIDs. Fixtures must contain generated
+`authKey` values or account IDs. Fixtures must contain generated
 values only. Protocol work must use a clean-room implementation and document
 the provenance of bundled public app constants. Never copy reference implementation
 code or publish account secrets.
