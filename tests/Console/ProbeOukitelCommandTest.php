@@ -90,6 +90,7 @@ it('validates options before credentials and any SDK resolution', function (arra
     [['--device' => '<private>']], [['--credentials-stdin' => true, '--password-stdin' => true]],
     [['--credentials-from-config' => true, '--login' => 'private-login']],
     [['--password-stdin' => true]],
+    [['--device' => ['invalid-array']]],
 ]);
 
 it('rejects missing stdin and never implicitly consumes configured credentials', function (array $options, string $stdin): void {

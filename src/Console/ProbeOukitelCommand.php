@@ -43,7 +43,7 @@ final class ProbeOukitelCommand extends Command
                 $online = $device->isOnline === null ? 'unknown' : ($device->isOnline ? 'online' : 'offline');
                 $this->line(($index + 1).': Device ****'.ProbeOutput::suffix($device->id->deviceKey).' ('.$online.')');
             }
-            $selector = $this->option('device');
+            $selector = $this->optionalText($this->option('device'));
             if ($selector === null) {
                 $this->info($devices === [] ? 'No devices found.' : 'Select a listed index or unique masked suffix with --device.');
 
@@ -86,8 +86,8 @@ final class ProbeOukitelCommand extends Command
     /** @return array{Region, ?int, ?int} */
     private function validateOptions(): array
     {
-        $value = $this->option('region');
-        $region = is_string($value) ? Region::tryFrom(strtoupper($value)) : null;
+        $value = $this->optionalText($this->option('region'));
+        $region = $value === null ? null : Region::tryFrom(strtoupper($value));
         if ($region === null) {
             throw new ProbeInputInvalid('Choose region EU, US or CN.');
         }
@@ -100,8 +100,8 @@ final class ProbeOukitelCommand extends Command
         if ($modes > 1 || (($this->option('credentials-stdin') || $this->option('credentials-from-config')) && $this->option('login') !== null)) {
             throw new ProbeInputInvalid('Choose one credential input mode without conflicting login options.');
         }
-        $selector = $this->option('device');
-        if ($selector !== null && (! is_string($selector) || preg_match('/^[a-zA-Z0-9]+$/D', $selector) !== 1)) {
+        $selector = $this->optionalText($this->option('device'));
+        if ($selector !== null && preg_match('/^[a-zA-Z0-9]+$/D', $selector) !== 1) {
             throw new ProbeInputInvalid('Device selector must be a listed index or masked suffix.');
         }
         if ($selector === null && ($watch !== null || $this->option('wake') || $this->option('raw') || $this->option('capabilities'))) {
@@ -123,6 +123,15 @@ final class ProbeOukitelCommand extends Command
         return (int) $value;
     }
 
+    private function optionalText(mixed $value): ?string
+    {
+        if ($value !== null && ! is_string($value)) {
+            throw new ProbeInputInvalid('Provide a single text value for each option.');
+        }
+
+        return $value;
+    }
+
     private function credentials(Region $region): Credentials
     {
         if ($this->option('credentials-from-config')) {
@@ -130,10 +139,7 @@ final class ProbeOukitelCommand extends Command
 
             return ProbeCredentialsInput::validated($region, $config->probeLogin, $config->probePassword());
         }
-        $login = $this->option('login');
-        if ($login !== null && ! is_string($login)) {
-            throw new ProbeInputInvalid('Provide one account login.');
-        }
+        $login = $this->optionalText($this->option('login'));
         if ($this->option('credentials-stdin') || $this->option('password-stdin')) {
             if ($this->option('password-stdin') && (! is_string($login) || trim($login) === '')) {
                 throw new ProbeInputInvalid('--password-stdin requires --login.');
@@ -161,13 +167,12 @@ final class ProbeOukitelCommand extends Command
     }
 
     /** @param list<Device> $devices */
-    private function selectDevice(array $devices, mixed $selector): Device
+    private function selectDevice(array $devices, string $selector): Device
     {
-        if (is_string($selector) && ctype_digit($selector) && isset($devices[(int) $selector - 1])) {
+        if (ctype_digit($selector) && isset($devices[(int) $selector - 1])) {
             return $devices[(int) $selector - 1];
         }
-        $matches = array_values(array_filter($devices, static fn (Device $device): bool => is_string($selector)
-            && strcasecmp(ProbeOutput::suffix($device->id->deviceKey), $selector) === 0));
+        $matches = array_values(array_filter($devices, static fn (Device $device): bool => strcasecmp(ProbeOutput::suffix($device->id->deviceKey), $selector) === 0));
         if (count($matches) !== 1) {
             throw new ProbeInputInvalid('Device selection is missing or ambiguous; use its listed index.');
         }

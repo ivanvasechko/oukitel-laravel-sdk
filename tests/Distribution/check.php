@@ -95,7 +95,7 @@ PHP);
     if ($zip->open($temporary.'/archive/package.zip') !== true) {
         throw new RuntimeException('Package archive is unavailable.');
     }
-    foreach (['vendor/', 'tests/', '.github/', 'docs/', 'composer.lock'] as $excluded) {
+    foreach (['vendor/', 'node_modules/', 'tests/', '.github/', 'docs/', 'composer.lock', 'package.json', 'package-lock.json', 'testbench.yaml'] as $excluded) {
         for ($index = 0; $index < $zip->numFiles; $index++) {
             $name = $zip->getNameIndex($index);
             if (is_string($name) && str_starts_with($name, $excluded)) {

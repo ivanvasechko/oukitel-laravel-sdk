@@ -22,3 +22,4 @@
 /.markdownlint-cli2.jsonc export-ignore
 /.markdown-link-check.json export-ignore
 /coverage export-ignore
+/testbench.yaml export-ignore

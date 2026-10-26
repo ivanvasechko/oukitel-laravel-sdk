@@ -271,8 +271,10 @@ This library intentionally does not commit `composer.lock`. Consumers use their
 application lockfile; CI resolves both the lowest and latest supported dependency
 versions. Run `composer update` to refresh the local development lockfile.
 
-Tests boot Laravel with Orchestra Testbench. PHPStan checks production source
-at maximum level. CI enforces 90% coverage, the complete lowest/latest framework
+Tests boot Laravel with Orchestra Testbench. `testbench.yaml` registers the
+provider for package-aware static analysis, including older supported Larastan
+versions. PHPStan checks production source at maximum level.
+CI enforces 90% coverage, the complete lowest/latest framework
 matrix, isolated Redis ownership and archived consumers without dev dependencies.
 Live account/device access is not required or used by these checks.
 Set `OUKITEL_TEST_REDIS=1` and `REDIS_HOST` only for an isolated Redis test service
